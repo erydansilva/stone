@@ -8,13 +8,11 @@ namespace TemperatureStone.Domain.Repositories
 {
 	public interface ICityRepository : IDisposable
 	{
-		List<City> Get();
-		City Get(string name);
-		void Create(City city);
-		void Create(int cep);
-		void Update(City city);
-		void Delete(string name);
-		void PatchDelete(string name);
-		void GetMax(string name);
+		City Get(string name);				//2.2.1
+		string Create(string name);		//2.2.2
+		void Create(int cep);				//3.1
+		string Delete(string name);		//2.2.3
+		void PatchDelete(string name);	//2.2.4
+		void GetMax(string name);			//2.2.5
 	}
 }

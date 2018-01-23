@@ -15,8 +15,8 @@ namespace TemperatureStone.Data.DataContexts
 			Database.SetInitializer<TemperatureStoneDataContext>(new TemperatureStoneDataContextInitializer());
 		}
 
-		public DbSet<City> Usuarios { get; set; }
-		public DbSet<Temperature> Telefones { get; set; }
+		public DbSet<City> Cities { get; set; }
+		public DbSet<Temperature> Temperatures { get; set; }
 	}
 
 	public class TemperatureStoneDataContextInitializer : DropCreateDatabaseIfModelChanges<TemperatureStoneDataContext>
