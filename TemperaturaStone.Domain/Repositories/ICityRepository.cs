@@ -10,9 +10,8 @@ namespace TemperatureStone.Domain.Repositories
 	{
 		City Get(string name);				//2.2.1
 		string Create(string name);		//2.2.2
-		void Create(int cep);				//3.1
+		string CreateCEP(string cep);		//3.1
 		string Delete(string name);		//2.2.3
-		void PatchDelete(string name);	//2.2.4
-		void GetMax(string name);			//2.2.5
+		List<City> GetMax();					//2.2.5
 	}
 }

@@ -47,10 +47,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="City.cs" />
+    <Compile Include="Models\City.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ICityRepository.cs" />
-    <Compile Include="Temperature.cs" />
+    <Compile Include="Models\Temperature.cs" />
+    <Compile Include="Repositories\ITemperatureRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
