@@ -9,6 +9,7 @@ using TemperatureStone.Data.Repositories;
 using TemperatureStone.Domain;
 using TemperatureStone.Domain.Repositories;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace TemperatureStone.Controllers
 {
@@ -24,17 +25,20 @@ namespace TemperatureStone.Controllers
 		{
 			try
 			{
-				string[] texto = new string[7]
-				{	"Apenas os seguintes endpoints estão disponíveis:",
-					"GET: city/{city_name} (Cidade com as temperaturas das últimas 30 horas.)",
-					"POST: city/{city_name} (Cadastra nova cidade para ter temperatura monitorada.)",
-					"POST: city/by_cep/{cep} (Cadastra nova cidade pelo CEP para ter temperatura monitorada.)",
-					"DELETE: city/{city_name} (Remove cidade do monitoramento.)",
-					"PATCH: city/{city_name} (Apaga histórico de temperaturas de uma cidade.)",
-					"GET: cities/max_temperatures (Lista as 3 cidades com maior temperatura já registrada.)"
+				var avisoEndpoints = new
+				{
+					Aviso = "Apenas os seguintes endpoints estão disponíveis:",
+					endPoint1 = "GET: city/{city_name} (Cidade com as temperaturas das últimas 30 horas.)",
+					endPoint2 = "POST: city/{city_name} (Cadastra nova cidade para ter temperatura monitorada.)",
+					endPoint3 = "POST: city/by_cep/{cep} (Cadastra nova cidade pelo CEP para ter temperatura monitorada.)",
+					endPoint4 = "DELETE: city/{city_name} (Remove cidade do monitoramento.)",
+					endPoint5 = "PATCH: city/{city_name} (Apaga histórico de temperaturas de uma cidade.)",
+					endPoint6 = "GET: cities/max_temperatures (Lista as 3 cidades com maior temperatura já registrada.)"
 				};
 
-				var response = Request.CreateResponse(HttpStatusCode.OK, string.Join("\n", texto));
+				var json = JsonConvert.SerializeObject(avisoEndpoints);
+
+				var response = Request.CreateResponse(HttpStatusCode.OK, json);
 				return response;
 			}
 			catch

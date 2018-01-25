@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataContexts\TemperatureStoneDataContext.cs" />
+    <Compile Include="ExternalAccesses\ExternalAccess.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\CityRepository.cs" />

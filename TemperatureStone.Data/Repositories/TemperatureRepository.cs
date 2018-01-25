@@ -31,6 +31,13 @@ namespace TemperatureStone.Data.Repositories
 
 			return "ok";
 		}
+
+		public void SaveTemperature(List<Temperature> list)
+		{
+			db.Temperatures.AddRange(list);
+			db.SaveChanges();
+		}
+
 		public void Dispose()
 		{
 			db.Dispose();

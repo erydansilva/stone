@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using TemperatureStone.Data.DataContexts;
+using TemperatureStone.Data.ExternalAccesses;
 using TemperatureStone.Domain;
 using TemperatureStone.Domain.Repositories;
 using Newtonsoft.Json.Linq;
@@ -21,8 +22,7 @@ namespace TemperatureStone.Data.Repositories
 		{
 			try
 			{
-				byte[] bytes = Encoding.Default.GetBytes(name);
-				name = Encoding.UTF8.GetString(bytes);
+				name = ExternalAccess.EncodeUTF7(name);
 
 				City city = new City();
 				city = db.Cities.FirstOrDefault(x => x.Name == name);
@@ -34,7 +34,7 @@ namespace TemperatureStone.Data.Repositories
 				throw e;
 			}
 		}
-		//---------------------------------------------------------------------------------------------
+		
 		public string Create(string name)
 		{
 			try
@@ -42,14 +42,15 @@ namespace TemperatureStone.Data.Repositories
 				if (name is null || name == "")
 					throw new Exception();
 
-				byte[] bytes = Encoding.Default.GetBytes(name);
-				name = Encoding.UTF8.GetString(bytes);
+				name = ExternalAccess.EncodeUTF7(name);
 
 				//Verifica se existe cidade com o mesmo nome na base
 				if (db.Cities.Count(e => e.Name == name) > 0)
 					return "Já existe a cidade " + name + " cadastrada.";
 
 				//Verifica se nome da cidade existe na base hgbrasil
+				if (ExternalAccess.CheckCity(name))
+					return "Cidade " + name + " não encontrada na base de consulta de clima.";
 
 				City city = new City { Name = name };
 
@@ -63,7 +64,7 @@ namespace TemperatureStone.Data.Repositories
 				throw e;
 			}
 		}
-		//---------------------------------------------------------------------------------------------
+		
 		public string CreateCEP(string cep)
 		{
 			if (Regex.Matches(cep, @"[a-zA-Z]").Count > 0 || cep.Count(Char.IsDigit) != 8)
@@ -71,34 +72,32 @@ namespace TemperatureStone.Data.Repositories
 
 			cep = string.Concat(cep.Where(char.IsDigit));
 
-			using (WebClient wc = new WebClient())
-			{
-				var json = wc.DownloadString("https://viacep.com.br/ws/" + cep + "/json");
-				string localidade = (string)JObject.Parse(json)["localidade"];
+			string localidade = ExternalAccess.FindByCep(cep);
 
-				if (localidade is null)
-					return "CEP não encontrado.";
+			if (localidade is null)
+				return "CEP não encontrado.";
 
-				byte[] bytes = Encoding.Default.GetBytes(localidade);
-				localidade = Encoding.UTF8.GetString(bytes);
+			//Verifica se existe cidade com o mesmo nome na base
+			if (db.Cities.Count(e => e.Name == localidade) > 0)
+				return "Já existe a cidade " + localidade + " cadastrada.";
 
-				//Verifica se nome da cidade existe na base hgbrasil
+			//Verifica se nome da cidade existe na base hgbrasil
+			if (ExternalAccess.CheckCity(localidade))
+				return "Cidade " + localidade + " não encontrada na base de consulta de clima.";
 
-				City city = new City { Name = localidade };
+			City city = new City { Name = localidade };
 
-				db.Cities.Add(city);
-				db.SaveChanges();
-			}
+			db.Cities.Add(city);
+			db.SaveChanges();
 
 			return "ok";
 		}
-		//---------------------------------------------------------------------------------------------
+		
 		public string Delete(string name)
 		{
 			try
 			{
-				byte[] bytes = Encoding.Default.GetBytes(name);
-				name = Encoding.UTF8.GetString(bytes);
+				name = ExternalAccess.EncodeUTF7(name);
 
 				City city = db.Cities.Find(name);
 				if (city == null)
@@ -116,7 +115,7 @@ namespace TemperatureStone.Data.Repositories
 				throw e;
 			}
 		}
-		//---------------------------------------------------------------------------------------------
+		
 		public List<City> GetMax()
 		{
 			try
@@ -131,9 +130,13 @@ namespace TemperatureStone.Data.Repositories
 				throw e;
 			}
 		}
-	//---------------------------------------------------------------------------------------------
 
-	public void Dispose()
+		public IQueryable<City> GetAllCities()
+		{
+			return db.Cities;
+		}
+
+		public void Dispose()
 		{
 			db.Dispose();
 		}

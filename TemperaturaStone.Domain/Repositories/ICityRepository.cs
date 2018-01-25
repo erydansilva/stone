@@ -12,6 +12,7 @@ namespace TemperatureStone.Domain.Repositories
 		string Create(string name);		//2.2.2
 		string CreateCEP(string cep);		//3.1
 		string Delete(string name);		//2.2.3
-		List<City> GetMax();					//2.2.5
+		List<City> GetMax();             //2.2.5
+		IQueryable<City> GetAllCities();
 	}
 }
