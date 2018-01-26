@@ -94,7 +94,7 @@ namespace TemperatureStone.Data.Repositories
 			{
 				name = ExternalAccess.EncodeUTF7(name);
 
-				City city = db.Cities.Where(t => t.Name == name).FirstOrDefault();
+				City city = db.Cities.FirstOrDefault(x => x.Name == name);
 				if (city == null)
 				{
 					return "Cidade não encontrada.";
