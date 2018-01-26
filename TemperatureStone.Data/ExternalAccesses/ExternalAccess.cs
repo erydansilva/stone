@@ -1,11 +1,8 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 using TemperatureStone.Domain;
 
 namespace TemperatureStone.Data.ExternalAccesses
@@ -17,7 +14,7 @@ namespace TemperatureStone.Data.ExternalAccesses
 		{
 			using (WebClient wc = new WebClient())
 			{
-				var json = wc.DownloadString("https://api.hgbrasil.com/weather/?format=json&city_name=" + name + "key=86eb7b15");
+				var json = wc.DownloadString("https://api.hgbrasil.com/weather/?format=json&city_name=" + name + "&key=86eb7b15");
 				string localidade = (string)JObject.Parse(json).First["city"];
 
 				if (localidade != RemoveAccents(name))
@@ -77,7 +74,7 @@ namespace TemperatureStone.Data.ExternalAccesses
 		public static string EncodeUTF7(string city_name)
 		{
 			byte[] bytes = Encoding.Default.GetBytes(city_name);
-			city_name = Encoding.UTF7.GetString(bytes);
+			city_name = Encoding.UTF8.GetString(bytes);
 
 			return city_name;
 		}

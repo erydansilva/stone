@@ -1,17 +1,8 @@
-﻿using System;
+﻿using Quartz;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Quartz;
-using System.Configuration;
 using System.Net;
-using Newtonsoft.Json.Linq;
 using TemperatureStone.Data.ExternalAccesses;
 using TemperatureStone.Data.Repositories;
-
-using System.IO;
-using System.Net.Mail;
-using System.Web.UI;
 using TemperatureStone.Domain;
 
 namespace TemperatureStone.Job
@@ -39,7 +30,7 @@ namespace TemperatureStone.Job
 				}
 			}
 
-			//temperatureRepository.SaveTemperature(list);
+			temperatureRepository.SaveTemperature(list);
 		}
 	}
 }

@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using TemperatureStone.Data.DataContexts;
 using TemperatureStone.Data.ExternalAccesses;
 using TemperatureStone.Domain;
 using TemperatureStone.Domain.Repositories;
-using Newtonsoft.Json.Linq;
-using System.Text.RegularExpressions;
 
 namespace TemperatureStone.Data.Repositories
 {
@@ -40,7 +35,7 @@ namespace TemperatureStone.Data.Repositories
 			try
 			{
 				if (name is null || name == "")
-					throw new Exception();
+					return "Nome da cidade inválido.";
 
 				name = ExternalAccess.EncodeUTF7(name);
 
@@ -99,7 +94,7 @@ namespace TemperatureStone.Data.Repositories
 			{
 				name = ExternalAccess.EncodeUTF7(name);
 
-				City city = db.Cities.Find(name);
+				City city = db.Cities.Where(t => t.Name == name).FirstOrDefault();
 				if (city == null)
 				{
 					return "Cidade não encontrada.";

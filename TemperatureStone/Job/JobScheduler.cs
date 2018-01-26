@@ -1,9 +1,5 @@
 ﻿using Quartz;
 using Quartz.Impl;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace TemperatureStone.Job
 {
@@ -24,7 +20,7 @@ namespace TemperatureStone.Job
 				.ForJob(temperatureJob)
 				.WithIdentity("trigger1")
 				.StartNow()
-				.WithCronSchedule("0 0/1 * * * ?") // Tempo: A cada 1 minuto o job executa
+				.WithCronSchedule("0 0/60 * * * ?") // Tempo: A cada 60 minutos o job executa
 				.Build();
 
 			ISchedulerFactory sf = new StdSchedulerFactory();
