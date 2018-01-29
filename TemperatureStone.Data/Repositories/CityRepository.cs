@@ -116,46 +116,31 @@ namespace TemperatureStone.Data.Repositories
 			try
 			{
 				List<City> cities = new List<City>();
+				List<City> topCities = new List<City>();
 				List<Temperature> temperatures = new List<Temperature>();
 
-				//------------------------------------
-				/*select t.CityId, t.LocalTemperature, t.Date
-				from Temperatures as t
-					 join(
-						  select CityId, max(LocalTemperature) as localTemp
-						  from Temperatures
-						  group by CityId
-					 ) as tt on t.CityId = tt.CityId
-				where t.LocalTemperature = tt.localTemp
-				order by t.LocalTemperature desc*/
-				//------------------------------------
+				//Guarda a maior temperatura registrada para cada cidade
+				cities = GetAllCities().ToList();
+				foreach(var item in cities)
+				{
+					var topCityTemperature = db.Temperatures
+						.Where(x => x.CityId == item.Id)
+						.OrderByDescending(t => t.LocalTemperature)
+						.Take(1).ToList();
+					if(topCityTemperature != null)
+						temperatures.Add(topCityTemperature[0]);
+					item.Temperatures.Clear();
+				}
 
-				//temperatures = db.Temperatures
-				//	.Join(db.Temperatures,
-				//	t1 => t1.Id, t2 => t2.CityId,
-				//	(t1, t2) => new { Temperature = t1 })
-				//	.Where(temp => temp.Id ==
+				List<Temperature> SortedTemperatures = temperatures.OrderByDescending(t => t.LocalTemperature).Take(3).ToList();
+				foreach(var temperature in SortedTemperatures)
+				{
+					var city = cities.FirstOrDefault(x => x.Id == temperature.CityId);
+					city.Temperatures.Add(temperature);
+					topCities.Add(city);
+				}
 
-				var subQuery = db.Temperatures
-					.GroupBy(x => x.CityId)
-					.OrderByDescending(m => m.Max(lt => lt.LocalTemperature))
-					.Select(k => k.Key)
-					.Take(3);
-
-				var query = db.Cities
-					.Where(x => subQuery.Any(id => x.Id == id));
-
-				//foreach(var item in query)
-				//{
-				//	Temperature temp = subQuery.SingleOrDefault(item => item. == "Event 2");
-				//	cities.Add(new City(
-				//		item.Id,
-				//		item.Name,
-				//		subQuery.SingleOrDefault(x => x.cityId ==)
-				//	);
-				//}
-
-				return cities;
+				return topCities;
 			}
 			catch (Exception e)
 			{

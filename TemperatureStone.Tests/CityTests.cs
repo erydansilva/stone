@@ -11,6 +11,7 @@ namespace TemperatureStone.Tests
 	{
 		private ICityRepository cityRepository = new CityRepository();
 
+		//Teste de inserção de uma cidade na base
 		[TestMethod]
 		public void InsertCity()
 		{
@@ -21,6 +22,7 @@ namespace TemperatureStone.Tests
 			Assert.AreEqual("ok", result);
 		}
 
+		//Teste de inserção de uma cidade existente na base
 		[TestMethod]
 		public void InsertCityDuplicate()
 		{
@@ -32,6 +34,7 @@ namespace TemperatureStone.Tests
 			Assert.AreEqual("Já existe a cidade " + name + " cadastrada.", result);
 		}
 
+		//Teste de inserção de uma cidade por CEP
 		[TestMethod]
 		public void InsertCityByCEP()
 		{
@@ -42,6 +45,7 @@ namespace TemperatureStone.Tests
 			Assert.AreEqual("ok", result);
 		}
 
+		//Teste de inserção de uma cidade com cep errado
 		[TestMethod]
 		public void InsertCityNonexistentCEP()
 		{
@@ -52,6 +56,7 @@ namespace TemperatureStone.Tests
 			Assert.AreEqual("CEP não encontrado.", result);
 		}
 
+		//Teste de inserção de uma cidade com CEP já existente na base
 		[TestMethod]
 		public void InsertCityDuplicateByCEP()
 		{
@@ -63,6 +68,7 @@ namespace TemperatureStone.Tests
 			Assert.AreEqual("Já existe a cidade Rio de Janeiro cadastrada.", result);
 		}
 
+		//Teste de busca de informações de uma cidade
 		[TestMethod]
 		public void GetCity()
 		{
@@ -76,6 +82,7 @@ namespace TemperatureStone.Tests
 			Assert.AreEqual(name, response.Name);
 		}
 
+		//Teste de busca de informações de uma cidade n~~ao existente na base
 		[TestMethod]
 		public void GetNonexistentCity()
 		{
@@ -87,6 +94,7 @@ namespace TemperatureStone.Tests
 			Assert.IsNull(response);
 		}
 
+		//Teste de remoção de uma cidade
 		[TestMethod]
 		public void DeleteCity()
 		{
@@ -99,6 +107,7 @@ namespace TemperatureStone.Tests
 			Assert.AreEqual("ok", result);
 		}
 
+		//Teste de remoção de uma cidade não presente na base
 		[TestMethod]
 		public void DeleteNonexistentCity()
 		{
@@ -108,7 +117,5 @@ namespace TemperatureStone.Tests
 
 			Assert.AreEqual("Cidade não encontrada.", result);
 		}
-
-		
 	}
 }
