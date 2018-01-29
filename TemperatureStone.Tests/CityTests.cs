@@ -35,7 +35,7 @@ namespace TemperatureStone.Tests
 		[TestMethod]
 		public void InsertCityByCEP()
 		{
-			string cep = "12246-001";
+			string cep = "90450-000";
 
 			string result = cityRepository.CreateCEP(cep);
 

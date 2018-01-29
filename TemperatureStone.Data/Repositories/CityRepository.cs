@@ -73,8 +73,8 @@ namespace TemperatureStone.Data.Repositories
 				return "CEP não encontrado.";
 
 			//Verifica se existe cidade com o mesmo nome na base
-			if (db.Cities.Count(e => e.Name == localidade) > 0)
-				return "Já existe a cidade " + localidade + " cadastrada.";
+			if (db.Cities.Any(e => e.Name == localidade))
+					return "Já existe a cidade " + localidade + " cadastrada.";
 
 			//Verifica se nome da cidade existe na base hgbrasil
 			if (ExternalAccess.CheckCity(localidade))
