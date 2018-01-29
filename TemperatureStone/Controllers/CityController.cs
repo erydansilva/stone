@@ -118,7 +118,7 @@ namespace TemperatureStone.Controllers
 		}
 
 		// GET: cities/max_temperatures (Lista as 3 cidades com maior temperatura já registrada.)
-		[Route("city/max_temperatures")]
+		[Route("cities/max_temperatures")]
 		[HttpGet]
 		public HttpResponseMessage GetMaxCities()
 		{

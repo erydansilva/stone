@@ -17,7 +17,7 @@ namespace TemperatureStone.Data.Repositories
 		{
 			try
 			{
-				name = ExternalAccess.EncodeUTF7(name);
+				name = ExternalAccess.EncodeUTF8(name);
 
 				City city = new City();
 				city = db.Cities.FirstOrDefault(x => x.Name == name);
@@ -37,7 +37,7 @@ namespace TemperatureStone.Data.Repositories
 				if (name is null || name == "")
 					return "Nome da cidade inválido.";
 
-				name = ExternalAccess.EncodeUTF7(name);
+				name = ExternalAccess.EncodeUTF8(name);
 
 				//Verifica se existe cidade com o mesmo nome na base
 				if (db.Cities.Count(e => e.Name == name) > 0)
@@ -69,7 +69,7 @@ namespace TemperatureStone.Data.Repositories
 
 			string localidade = ExternalAccess.FindByCep(cep);
 
-			if (localidade is null)
+			if (localidade == "")
 				return "CEP não encontrado.";
 
 			//Verifica se existe cidade com o mesmo nome na base
@@ -92,7 +92,7 @@ namespace TemperatureStone.Data.Repositories
 		{
 			try
 			{
-				name = ExternalAccess.EncodeUTF7(name);
+				name = ExternalAccess.EncodeUTF8(name);
 
 				City city = db.Cities.FirstOrDefault(x => x.Name == name);
 				if (city == null)
@@ -116,7 +116,44 @@ namespace TemperatureStone.Data.Repositories
 			try
 			{
 				List<City> cities = new List<City>();
-				//cities = db.Cities.Find(x => x.Name == "Rio");
+				List<Temperature> temperatures = new List<Temperature>();
+
+				//------------------------------------
+				/*select t.CityId, t.LocalTemperature, t.Date
+				from Temperatures as t
+					 join(
+						  select CityId, max(LocalTemperature) as localTemp
+						  from Temperatures
+						  group by CityId
+					 ) as tt on t.CityId = tt.CityId
+				where t.LocalTemperature = tt.localTemp
+				order by t.LocalTemperature desc*/
+				//------------------------------------
+
+				//temperatures = db.Temperatures
+				//	.Join(db.Temperatures,
+				//	t1 => t1.Id, t2 => t2.CityId,
+				//	(t1, t2) => new { Temperature = t1 })
+				//	.Where(temp => temp.Id ==
+
+				var subQuery = db.Temperatures
+					.GroupBy(x => x.CityId)
+					.OrderByDescending(m => m.Max(lt => lt.LocalTemperature))
+					.Select(k => k.Key)
+					.Take(3);
+
+				var query = db.Cities
+					.Where(x => subQuery.Any(id => x.Id == id));
+
+				//foreach(var item in query)
+				//{
+				//	Temperature temp = subQuery.SingleOrDefault(item => item. == "Event 2");
+				//	cities.Add(new City(
+				//		item.Id,
+				//		item.Name,
+				//		subQuery.SingleOrDefault(x => x.cityId ==)
+				//	);
+				//}
 
 				return cities;
 			}

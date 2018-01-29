@@ -24,8 +24,9 @@ namespace TemperatureStone.Tests
 		[TestMethod]
 		public void InsertCityDuplicate()
 		{
-			string name = "Maricá";
+			string name = "Rio de Janeiro";
 
+			string resultOk = cityRepository.Create(name);
 			string result = cityRepository.Create(name);
 
 			Assert.AreEqual("Já existe a cidade " + name + " cadastrada.", result);
@@ -42,19 +43,32 @@ namespace TemperatureStone.Tests
 		}
 
 		[TestMethod]
-		public void InsertCityDuplicateByCEP()
+		public void InsertCityNonexistentCEP()
 		{
-			string cep = "12246-001";
-
+			string cep = "00000111";
+			
 			string result = cityRepository.CreateCEP(cep);
 
-			Assert.AreNotEqual("ok", result);
+			Assert.AreEqual("CEP não encontrado.", result);
+		}
+
+		[TestMethod]
+		public void InsertCityDuplicateByCEP()
+		{
+			string cep = "20520202";
+
+			string resultOk = cityRepository.CreateCEP(cep);
+			string result = cityRepository.CreateCEP(cep);
+
+			Assert.AreEqual("Já existe a cidade Rio de Janeiro cadastrada.", result);
 		}
 
 		[TestMethod]
 		public void GetCity()
 		{
 			string name = "Rio de Janeiro";
+
+			string resultOk = cityRepository.Create(name);
 
 			City response = new City();
 			response = cityRepository.Get(name);
@@ -77,6 +91,8 @@ namespace TemperatureStone.Tests
 		public void DeleteCity()
 		{
 			string name = "Maricá";
+
+			string resultOk = cityRepository.Create(name);
 
 			string result = cityRepository.Delete(name);
 

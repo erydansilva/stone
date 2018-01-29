@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text;
 using TemperatureStone.Data.DataContexts;
+using TemperatureStone.Data.ExternalAccesses;
 using TemperatureStone.Domain;
 using TemperatureStone.Domain.Repositories;
 
@@ -13,8 +14,7 @@ namespace TemperatureStone.Data.Repositories
 		
 		public string PatchCity(string name)
 		{
-			byte[] bytes = Encoding.Default.GetBytes(name);
-			name = Encoding.UTF8.GetString(bytes);
+			name = ExternalAccess.EncodeUTF8(name);
 
 			City city = new City();
 			city = db.Cities.FirstOrDefault(x => x.Name == name);

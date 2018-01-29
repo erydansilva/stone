@@ -1,5 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
+using TemperatureStone.Data.ExternalAccesses;
 using TemperatureStone.Data.Repositories;
+using TemperatureStone.Domain;
 using TemperatureStone.Domain.Repositories;
 
 namespace TemperatureStone.Tests
@@ -8,11 +11,42 @@ namespace TemperatureStone.Tests
 	public class TemperatureTests
 	{
 		private ITemperatureRepository temperatureRepository = new TemperatureRepository();
+		private ICityRepository cityRepository = new CityRepository();
+
+		[TestMethod]
+		public void InsertTemperature()
+		{
+			string name = "Rio de Janeiro";
+			string resultOk = cityRepository.Create(name);
+
+			City city = new City();
+			city = cityRepository.Get(name);
+
+			//Adiciona informação de temperatura
+			Temperature temperature = ExternalAccess.GetTemperature(city.Name);
+			temperature.CityId = city.Id;
+			List<Temperature> list = new List<Temperature>();
+			list.Add(temperature);
+
+			var result = "bla";
+
+			Assert.AreEqual("ok", result);
+		}
 
 		[TestMethod]
 		public void PatchCity()
 		{
 			string name = "Rio de Janeiro";
+			string resultOk = cityRepository.Create(name);
+
+			City city = new City();
+			city = cityRepository.Get(name);
+
+			//Adiciona informação de temperatura
+			Temperature temperature = ExternalAccess.GetTemperature(city.Name);
+			temperature.CityId = city.Id;
+			List<Temperature> list = new List<Temperature>();
+			list.Add(temperature);
 
 			string result = temperatureRepository.PatchCity(name);
 
