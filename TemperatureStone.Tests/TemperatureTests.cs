@@ -27,10 +27,13 @@ namespace TemperatureStone.Tests
 			temperature.CityId = city.Id;
 			List<Temperature> list = new List<Temperature>();
 			list.Add(temperature);
+			temperatureRepository.SaveTemperature(list);
 
-			var result = "bla";
+			//Busca temperatura inserida
+			Temperature resp = new Temperature();
+			resp = temperatureRepository.GetSingleTemperature();
 
-			Assert.AreEqual("ok", result);
+			Assert.IsNotNull(resp);
 		}
 
 		[TestMethod]

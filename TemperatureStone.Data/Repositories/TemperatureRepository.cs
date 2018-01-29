@@ -11,7 +11,12 @@ namespace TemperatureStone.Data.Repositories
 	public class TemperatureRepository : ITemperatureRepository
 	{
 		private TemperatureStoneDataContext db = new TemperatureStoneDataContext();
-		
+
+		public Temperature GetSingleTemperature()
+		{
+			return db.Temperatures.FirstOrDefault();
+		}
+
 		public string PatchCity(string name)
 		{
 			name = ExternalAccess.EncodeUTF8(name);

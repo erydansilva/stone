@@ -74,7 +74,7 @@ namespace TemperatureStone.Data.ExternalAccesses
 
 		public static string EncodeUTF8(string city_name)
 		{
-			if (city_name.Any(ch => !Char.IsLetterOrDigit(ch)))
+			if (city_name.Replace(" ","").Any(ch => !Char.IsLetterOrDigit(ch)))
 			{ 
 				byte[] bytes = Encoding.Default.GetBytes(city_name);
 				city_name = Encoding.UTF8.GetString(bytes);
