@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="DataContexts\TemperatureStoneDataContext.cs" />
     <Compile Include="ExternalAccesses\ExternalAccess.cs" />
     <Compile Include="Migrations\Configuration.cs" />

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data.Entity;
 using TemperatureStone.Domain;
 
 namespace TemperatureStone.Data.DataContexts
@@ -12,7 +7,7 @@ namespace TemperatureStone.Data.DataContexts
 	{
 		public TemperatureStoneDataContext() : base("ConexaoStone")
 		{
-			Database.SetInitializer<TemperatureStoneDataContext>(new TemperatureStoneDataContextInitializer());
+			Database.SetInitializer(new TemperatureStoneDataContextInitializer());
 		}
 
 		public DbSet<City> Cities { get; set; }

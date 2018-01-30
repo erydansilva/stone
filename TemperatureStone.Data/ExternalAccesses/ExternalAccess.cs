@@ -15,7 +15,7 @@ namespace TemperatureStone.Data.ExternalAccesses
 		{
 			using (WebClient wc = new WebClient())
 			{
-				var json = wc.DownloadString("https://api.hgbrasil.com/weather/?format=json&city_name=" + name + "&key=86eb7b15");
+				var json = wc.DownloadString(Constants.HgBrasilAddress + name + Constants.HgBrasilToken);
 				string localidade = (string)JObject.Parse(json)["city"];
 
 				if (localidade != RemoveAccents(name))
@@ -32,7 +32,7 @@ namespace TemperatureStone.Data.ExternalAccesses
 				Temperature temperature = new Temperature();
 				using (WebClient wc = new WebClient())
 				{
-					var json = wc.DownloadString("https://api.hgbrasil.com/weather/?format=json&city_name=" + name + "&key=86eb7b15");
+					var json = wc.DownloadString(Constants.HgBrasilAddress + name + Constants.HgBrasilToken);
 					string data = (string)JObject.Parse(json)["results"]["date"];
 					string hora = (string)JObject.Parse(json)["results"]["time"];
 					string dataHora = data + " " + hora;
@@ -49,7 +49,7 @@ namespace TemperatureStone.Data.ExternalAccesses
 			string localidade = "";
 			using (WebClient wc = new WebClient())
 			{
-				var json = wc.DownloadString("https://viacep.com.br/ws/" + cep + "/json");
+				var json = wc.DownloadString(Constants.ViaCepAddress + cep + Constants.ViaCepJsonFormat);
 
 				if ((string)JObject.Parse(json)["localidade"] != null)
 					localidade = (string)JObject.Parse(json)["localidade"];

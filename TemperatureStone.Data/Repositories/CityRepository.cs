@@ -40,7 +40,7 @@ namespace TemperatureStone.Data.Repositories
 				name = ExternalAccess.EncodeUTF8(name);
 
 				//Verifica se existe cidade com o mesmo nome na base
-				if (db.Cities.Count(e => e.Name == name) > 0)
+				if (db.Cities.Any(e => e.Name == name))
 					return "Já existe a cidade " + name + " cadastrada.";
 
 				//Verifica se nome da cidade existe na base hgbrasil
@@ -72,20 +72,7 @@ namespace TemperatureStone.Data.Repositories
 			if (localidade == "")
 				return "CEP não encontrado.";
 
-			//Verifica se existe cidade com o mesmo nome na base
-			if (db.Cities.Any(e => e.Name == localidade))
-					return "Já existe a cidade " + localidade + " cadastrada.";
-
-			//Verifica se nome da cidade existe na base hgbrasil
-			if (ExternalAccess.CheckCity(localidade))
-				return "Cidade " + localidade + " não encontrada na base de consulta de clima.";
-
-			City city = new City { Name = localidade };
-
-			db.Cities.Add(city);
-			db.SaveChanges();
-
-			return "ok";
+			return Create(localidade);
 		}
 		
 		public string Delete(string name)
